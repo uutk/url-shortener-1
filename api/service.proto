@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+// The greeting service definition.
+service Shortener {
+  // Sends a greeting
+  rpc Shorten (MessageRequest) returns (MessageReply) {}
+}
+
+// The request message containing the user's name.
+message MessageRequest {
+  string msg = 1;
+}
+
+// The response message containing the greetings
+message MessageReply {
+  string message = 1;
+}
