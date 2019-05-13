@@ -46,13 +46,12 @@ func ReadURL(hash string) URL {
 
 	if err := s.Query(`SELECT id, url, ts, visited FROM url_shortener.urls WHERE hash = ? LIMIT 1 ALLOW FILTERING`,
 		hash).Consistency(gocql.One).Scan(&id, &url, &ts, &visited); err != nil {
-		log.Fatal(err)
-	}
-
-
-	if err := s.Query(`UPDATE url_shortener.urls SET visited = ? WHERE id = ?`,
-		visited + 1, id).Exec(); err != nil {
-		log.Fatal(err)
+		log.Warn(err)
+	} else {
+		if err := s.Query(`UPDATE url_shortener.urls SET visited = ? WHERE id = ?`,
+			visited + 1, id).Exec(); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return URL{id, url, hash, ts, visited}
