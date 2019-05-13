@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+service Shortener {
+  rpc Shorten (URLRequest) returns (HashedURLReply) {}
+  rpc GetUrl (HashedUrlRequest) returns (URLReply) {}
+}
+
+message URLRequest {
+  string url = 1;
+}
+
+message HashedURLReply {
+  string url = 1;
+}
+
+message HashedUrlRequest {
+  string hash = 1;
+}
+
+message URLReply {
+  string url = 1;
+  int32 visited = 2;
+}

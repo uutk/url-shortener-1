@@ -1,2 +1,2 @@
 gen:
-	protoc -I api/ api/service.proto --go_out=plugins=grpc:api
+	protoc -I service/ service/service.proto --go_out=plugins=grpc:service
