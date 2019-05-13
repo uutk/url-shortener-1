@@ -9,7 +9,7 @@ import (
 func main() {
 	log.Println("We are about to go...")
 	dbSession := db.InitCassandra()
-	db.ReadURL("lbnBgP")
+
 	defer dbSession.Close()
 	api.Init()
 }

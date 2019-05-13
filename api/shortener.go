@@ -24,6 +24,7 @@ func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLR
 
 	hash, _ := db.WriteURL(in.Url)
 
+	log.Printf("Hashed. New URL is: %v", webUrl + hash)
 	return &pb.HashedURLReply{Url: webUrl + hash}, nil
 }
 
