@@ -4,6 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/vladkampov/url-shortener/api"
 	"github.com/vladkampov/url-shortener/db"
+	"os"
 )
 
 func main() {
@@ -11,5 +12,10 @@ func main() {
 	dbSession := db.InitCassandra()
 
 	defer dbSession.Close()
-	api.Init()
+	err := api.Run()
+	if err != nil {
+		log.Errorf("API error: %s", err)
+		os.Exit(1)
+		return
+	}
 }
