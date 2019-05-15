@@ -43,7 +43,9 @@ func WriteURL(url string, userId string) (string, error) {
 		}
 	}
 
-	if err := s.Query(`INSERT INTO url_shortener."urls" (id, url, hash, ts, visited, user_id) VALUES (?, ?, ?, ?, ?)`,
+	log.Println(id, url, hash, time.Now(), 0, userId)
+
+	if err := s.Query(`INSERT INTO url_shortener."urls" (id, url, hash, ts, visited, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
 		id, url, hash, time.Now(), 0, userId).Exec(); err != nil {
 		return "", err
 	}
