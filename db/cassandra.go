@@ -6,6 +6,7 @@ import (
 	"github.com/vladkampov/url-shortener/helpers"
 	"os"
 	"time"
+	"github.com/mitchellh/mapstructure"
 )
 
 type URL struct{
@@ -22,9 +23,24 @@ var s *gocql.Session
 func ReadURLsByUserId(userId string) ([]URL, error) {
 	var urls []URL
 
-	if err := s.Query(`SELECT id, url, ts, visited, user_id FROM url_shortener.urls WHERE user_id = ? LIMIT 1 ALLOW FILTERING`,
-		userId).Consistency(gocql.All).Scan(&urls); err != nil {
+	iter := s.Query(`SELECT id, url, hash, ts, visited FROM url_shortener.urls WHERE user_id = ? ALLOW FILTERING`,
+		userId).Consistency(gocql.All).Iter()
+
+	s, err := iter.SliceMap()
+
+	if err != nil {
 		return nil, err
+	}
+
+	for _, item := range s {
+		var url URL
+		err := mapstructure.Decode(item, &url)
+
+		if err != nil {
+			return nil, err
+		}
+
+		urls = append(urls, url)
 	}
 
 	return urls, nil
@@ -34,16 +50,26 @@ func WriteURL(url string, userId string) (string, error) {
 	id := gocql.TimeUUID()
 	hash := helpers.GetRandomString(6)
 
+	// return url if it was already shortened for current user
+	var hashFromDB string
+	err := s.Query(`SELECT hash FROM url_shortener.urls WHERE url = ? AND user_id = ? LIMIT 1 ALLOW FILTERING`,
+		url, userId).Consistency(gocql.One).Scan(&hashFromDB)
+
+	if  err == nil {
+		log.Println(hashFromDB)
+		return hashFromDB, nil
+	}
+
 	// Recreate hash if there's an entity with same hash
 	for true {
-		if err := s.Query(`SELECT id, url, ts FROM url_shortener.urls WHERE hash = ? LIMIT 1 ALLOW FILTERING`,
-			hash).Consistency(gocql.One).Scan(&id); err != nil {
+		if err := s.Query(`SELECT id FROM url_shortener.urls WHERE hash = ? LIMIT 1 ALLOW FILTERING`,
+			hash).Consistency(gocql.One); err != nil {
 			id = gocql.TimeUUID()
 			break
 		}
 	}
 
-	log.Println(id, url, hash, time.Now(), 0, userId)
+	log.Println("lalka")
 
 	if err := s.Query(`INSERT INTO url_shortener."urls" (id, url, hash, ts, visited, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
 		id, url, hash, time.Now(), 0, userId).Exec(); err != nil {

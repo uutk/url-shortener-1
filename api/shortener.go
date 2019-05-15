@@ -21,13 +21,14 @@ func (s *server) GetMyUrls(ctx context.Context, in *pb.UserIdRequest) (*pb.Array
 	urls, err := db.ReadURLsByUserId(in.UserId)
 	if err != nil {
 		log.Warnf("Can't read url by user id %s: $s", in.UserId, err)
+		return nil, err
 	}
 
 	for _, item := range urls {
 		urlsReplyArray = append(urlsReplyArray, &pb.FullURLObject{Url: item.Url, Hash: item.Hash, Visited: item.Visited, UserId: item.UserId})
 	}
 
-	log.Printf("URL list goes to user id &s", in.UserId)
+	log.Printf("URL list goes to user id %s", in.UserId)
 	return &pb.ArrayURLsReply{Urls: urlsReplyArray}, nil
 }
 

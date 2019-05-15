@@ -9,6 +9,7 @@ require (
 	github.com/golang/protobuf v1.3.1
 	github.com/joho/godotenv v1.3.0
 	github.com/kr/pretty v0.1.0 // indirect
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/sirupsen/logrus v1.4.1
 	google.golang.org/grpc v1.20.1
 )
