@@ -3,18 +3,37 @@ syntax = "proto3";
 service Shortener {
   rpc Shorten (URLRequest) returns (HashedURLReply) {}
   rpc GetUrl (HashedUrlRequest) returns (URLReply) {}
+  rpc GetMyUrls (UserIdRequest) returns (ArrayURLsReply) {}
+}
+
+message FullURLObject {
+  string url = 1;
+  string hash = 2;
+  int32 visited = 3;
+  string user_id = 4;
 }
 
 message URLRequest {
   string url = 1;
+  string user_id = 2;
 }
 
 message HashedURLReply {
   string url = 1;
 }
 
+message UserIdRequest {
+  string url = 1;
+  string user_id = 2;
+}
+
+message ArrayURLsReply {
+  repeated FullURLObject urls = 1;
+}
+
 message HashedUrlRequest {
   string hash = 1;
+  string user_id = 2;
 }
 
 message URLReply {

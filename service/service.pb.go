@@ -22,8 +22,72 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type FullURLObject struct {
+	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	Hash                 string   `protobuf:"bytes,2,opt,name=hash,proto3" json:"hash,omitempty"`
+	Visited              int32    `protobuf:"varint,3,opt,name=visited,proto3" json:"visited,omitempty"`
+	UserId               string   `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FullURLObject) Reset()         { *m = FullURLObject{} }
+func (m *FullURLObject) String() string { return proto.CompactTextString(m) }
+func (*FullURLObject) ProtoMessage()    {}
+func (*FullURLObject) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0b84a42fa06f626, []int{0}
+}
+
+func (m *FullURLObject) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FullURLObject.Unmarshal(m, b)
+}
+func (m *FullURLObject) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FullURLObject.Marshal(b, m, deterministic)
+}
+func (m *FullURLObject) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FullURLObject.Merge(m, src)
+}
+func (m *FullURLObject) XXX_Size() int {
+	return xxx_messageInfo_FullURLObject.Size(m)
+}
+func (m *FullURLObject) XXX_DiscardUnknown() {
+	xxx_messageInfo_FullURLObject.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FullURLObject proto.InternalMessageInfo
+
+func (m *FullURLObject) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+func (m *FullURLObject) GetHash() string {
+	if m != nil {
+		return m.Hash
+	}
+	return ""
+}
+
+func (m *FullURLObject) GetVisited() int32 {
+	if m != nil {
+		return m.Visited
+	}
+	return 0
+}
+
+func (m *FullURLObject) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
 type URLRequest struct {
 	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	UserId               string   `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -33,7 +97,7 @@ func (m *URLRequest) Reset()         { *m = URLRequest{} }
 func (m *URLRequest) String() string { return proto.CompactTextString(m) }
 func (*URLRequest) ProtoMessage()    {}
 func (*URLRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a0b84a42fa06f626, []int{0}
+	return fileDescriptor_a0b84a42fa06f626, []int{1}
 }
 
 func (m *URLRequest) XXX_Unmarshal(b []byte) error {
@@ -61,6 +125,13 @@ func (m *URLRequest) GetUrl() string {
 	return ""
 }
 
+func (m *URLRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
 type HashedURLReply struct {
 	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -72,7 +143,7 @@ func (m *HashedURLReply) Reset()         { *m = HashedURLReply{} }
 func (m *HashedURLReply) String() string { return proto.CompactTextString(m) }
 func (*HashedURLReply) ProtoMessage()    {}
 func (*HashedURLReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a0b84a42fa06f626, []int{1}
+	return fileDescriptor_a0b84a42fa06f626, []int{2}
 }
 
 func (m *HashedURLReply) XXX_Unmarshal(b []byte) error {
@@ -100,8 +171,95 @@ func (m *HashedURLReply) GetUrl() string {
 	return ""
 }
 
+type UserIdRequest struct {
+	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	UserId               string   `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UserIdRequest) Reset()         { *m = UserIdRequest{} }
+func (m *UserIdRequest) String() string { return proto.CompactTextString(m) }
+func (*UserIdRequest) ProtoMessage()    {}
+func (*UserIdRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0b84a42fa06f626, []int{3}
+}
+
+func (m *UserIdRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UserIdRequest.Unmarshal(m, b)
+}
+func (m *UserIdRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UserIdRequest.Marshal(b, m, deterministic)
+}
+func (m *UserIdRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserIdRequest.Merge(m, src)
+}
+func (m *UserIdRequest) XXX_Size() int {
+	return xxx_messageInfo_UserIdRequest.Size(m)
+}
+func (m *UserIdRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserIdRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UserIdRequest proto.InternalMessageInfo
+
+func (m *UserIdRequest) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+func (m *UserIdRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
+type ArrayURLsReply struct {
+	Urls                 []*FullURLObject `protobuf:"bytes,1,rep,name=urls,proto3" json:"urls,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *ArrayURLsReply) Reset()         { *m = ArrayURLsReply{} }
+func (m *ArrayURLsReply) String() string { return proto.CompactTextString(m) }
+func (*ArrayURLsReply) ProtoMessage()    {}
+func (*ArrayURLsReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0b84a42fa06f626, []int{4}
+}
+
+func (m *ArrayURLsReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ArrayURLsReply.Unmarshal(m, b)
+}
+func (m *ArrayURLsReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ArrayURLsReply.Marshal(b, m, deterministic)
+}
+func (m *ArrayURLsReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ArrayURLsReply.Merge(m, src)
+}
+func (m *ArrayURLsReply) XXX_Size() int {
+	return xxx_messageInfo_ArrayURLsReply.Size(m)
+}
+func (m *ArrayURLsReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_ArrayURLsReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ArrayURLsReply proto.InternalMessageInfo
+
+func (m *ArrayURLsReply) GetUrls() []*FullURLObject {
+	if m != nil {
+		return m.Urls
+	}
+	return nil
+}
+
 type HashedUrlRequest struct {
 	Hash                 string   `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
+	UserId               string   `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -111,7 +269,7 @@ func (m *HashedUrlRequest) Reset()         { *m = HashedUrlRequest{} }
 func (m *HashedUrlRequest) String() string { return proto.CompactTextString(m) }
 func (*HashedUrlRequest) ProtoMessage()    {}
 func (*HashedUrlRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a0b84a42fa06f626, []int{2}
+	return fileDescriptor_a0b84a42fa06f626, []int{5}
 }
 
 func (m *HashedUrlRequest) XXX_Unmarshal(b []byte) error {
@@ -139,6 +297,13 @@ func (m *HashedUrlRequest) GetHash() string {
 	return ""
 }
 
+func (m *HashedUrlRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
 type URLReply struct {
 	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	Visited              int32    `protobuf:"varint,2,opt,name=visited,proto3" json:"visited,omitempty"`
@@ -151,7 +316,7 @@ func (m *URLReply) Reset()         { *m = URLReply{} }
 func (m *URLReply) String() string { return proto.CompactTextString(m) }
 func (*URLReply) ProtoMessage()    {}
 func (*URLReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a0b84a42fa06f626, []int{3}
+	return fileDescriptor_a0b84a42fa06f626, []int{6}
 }
 
 func (m *URLReply) XXX_Unmarshal(b []byte) error {
@@ -187,8 +352,11 @@ func (m *URLReply) GetVisited() int32 {
 }
 
 func init() {
+	proto.RegisterType((*FullURLObject)(nil), "FullURLObject")
 	proto.RegisterType((*URLRequest)(nil), "URLRequest")
 	proto.RegisterType((*HashedURLReply)(nil), "HashedURLReply")
+	proto.RegisterType((*UserIdRequest)(nil), "UserIdRequest")
+	proto.RegisterType((*ArrayURLsReply)(nil), "ArrayURLsReply")
 	proto.RegisterType((*HashedUrlRequest)(nil), "HashedUrlRequest")
 	proto.RegisterType((*URLReply)(nil), "URLReply")
 }
@@ -196,19 +364,27 @@ func init() {
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 189 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
-	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x57, 0x92, 0xe3, 0xe2, 0x0a, 0x0d, 0xf2,
-	0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x12, 0xe0, 0x62, 0x2e, 0x2d, 0xca, 0x91, 0x60,
-	0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x02, 0x31, 0x95, 0x94, 0xb8, 0xf8, 0x3c, 0x12, 0x8b, 0x33, 0x52,
-	0x53, 0xc0, 0xaa, 0x0a, 0x72, 0x2a, 0xb1, 0xa8, 0x51, 0xe3, 0x12, 0x80, 0xaa, 0x29, 0xca, 0x81,
-	0x99, 0x24, 0xc4, 0xc5, 0x92, 0x91, 0x58, 0x9c, 0x01, 0x55, 0x06, 0x66, 0x2b, 0x99, 0x71, 0x71,
-	0xe0, 0x36, 0x45, 0x48, 0x82, 0x8b, 0xbd, 0x2c, 0xb3, 0x38, 0xb3, 0x24, 0x35, 0x45, 0x82, 0x49,
-	0x81, 0x51, 0x83, 0x35, 0x08, 0xc6, 0x35, 0x4a, 0xe0, 0xe2, 0x0c, 0xce, 0xc8, 0x2f, 0x2a, 0x49,
-	0xcd, 0x4b, 0x2d, 0x12, 0xd2, 0xe4, 0x62, 0x87, 0x72, 0x84, 0xb8, 0xf5, 0x10, 0x4e, 0x97, 0xe2,
-	0xd7, 0x43, 0x75, 0xa7, 0x12, 0x83, 0x90, 0x06, 0x17, 0x9b, 0x7b, 0x6a, 0x49, 0x68, 0x51, 0x8e,
-	0x90, 0xa0, 0x1e, 0xba, 0x03, 0xa5, 0x38, 0xf5, 0x10, 0x2a, 0x93, 0xd8, 0xc0, 0x81, 0x61, 0x0c,
-	0x08, 0x00, 0x00, 0xff, 0xff, 0x94, 0x60, 0xaf, 0x71, 0x1d, 0x01, 0x00, 0x00,
+	// 306 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0x41, 0x4f, 0x02, 0x31,
+	0x10, 0x85, 0x59, 0x40, 0x70, 0x87, 0xb0, 0x60, 0x2f, 0x36, 0x9c, 0x48, 0x4f, 0xeb, 0xa5, 0x07,
+	0x34, 0x9a, 0x78, 0x31, 0x5e, 0x44, 0x13, 0x8c, 0x49, 0x4d, 0xcf, 0x06, 0xd8, 0x49, 0x76, 0x4d,
+	0x23, 0x38, 0xed, 0x92, 0xf0, 0x2f, 0xfc, 0xc9, 0x86, 0xca, 0xc6, 0xad, 0xca, 0xc5, 0xdb, 0xbc,
+	0x76, 0xde, 0xbc, 0xe9, 0x97, 0x42, 0xdf, 0x22, 0x6d, 0x8a, 0x25, 0xca, 0x35, 0xad, 0xdc, 0x4a,
+	0xe4, 0xd0, 0xbf, 0x2b, 0x8d, 0xd1, 0x6a, 0xf6, 0xb4, 0x78, 0xc5, 0xa5, 0x63, 0x43, 0x68, 0x95,
+	0x64, 0x78, 0x34, 0x8e, 0xd2, 0x58, 0xed, 0x4a, 0xc6, 0xa0, 0x9d, 0xcf, 0x6d, 0xce, 0x9b, 0xfe,
+	0xc8, 0xd7, 0x8c, 0x43, 0x77, 0x53, 0xd8, 0xc2, 0x61, 0xc6, 0x5b, 0xe3, 0x28, 0x3d, 0x52, 0x95,
+	0x64, 0xa7, 0xd0, 0x2d, 0x2d, 0xd2, 0x4b, 0x91, 0xf1, 0xb6, 0x37, 0x74, 0x76, 0xf2, 0x21, 0x13,
+	0x57, 0x00, 0x5a, 0xcd, 0x14, 0xbe, 0x97, 0x68, 0xff, 0x8a, 0xa9, 0x19, 0x9b, 0x81, 0x51, 0x40,
+	0x72, 0x3f, 0xb7, 0x39, 0x66, 0xde, 0xbe, 0x36, 0xdb, 0xdf, 0x66, 0x71, 0x0d, 0x7d, 0xed, 0xbb,
+	0xff, 0x31, 0xff, 0x02, 0x92, 0x5b, 0xa2, 0xf9, 0x56, 0xab, 0x99, 0xfd, 0x9a, 0x2f, 0xa0, 0x5d,
+	0x92, 0xb1, 0x3c, 0x1a, 0xb7, 0xd2, 0xde, 0x24, 0x91, 0x01, 0x21, 0xe5, 0xef, 0xc4, 0x0d, 0x0c,
+	0xf7, 0x5b, 0x91, 0xa9, 0x42, 0x2b, 0x52, 0x51, 0x8d, 0xd4, 0xc1, 0xd8, 0x4b, 0x38, 0x3e, 0xfc,
+	0xa0, 0x3a, 0xe0, 0x66, 0x00, 0x78, 0xf2, 0x11, 0x41, 0xfc, 0x9c, 0xaf, 0xc8, 0xe1, 0x1b, 0x12,
+	0x3b, 0x83, 0xee, 0x5e, 0xb0, 0x9e, 0xfc, 0xe6, 0x3b, 0x1a, 0xc8, 0x90, 0x99, 0x68, 0xb0, 0x14,
+	0x3a, 0x53, 0x74, 0x9a, 0x0c, 0x3b, 0x91, 0x3f, 0x57, 0x1f, 0xc5, 0xb2, 0xd6, 0x29, 0x21, 0x9e,
+	0xa2, 0x7b, 0xdc, 0x6a, 0x32, 0x96, 0x25, 0x32, 0x20, 0x3b, 0x1a, 0xc8, 0x90, 0x96, 0x68, 0x2c,
+	0x3a, 0xfe, 0x2f, 0x9d, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0xd0, 0xfa, 0xb1, 0xe0, 0x5c, 0x02,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -225,6 +401,7 @@ const _ = grpc.SupportPackageIsVersion4
 type ShortenerClient interface {
 	Shorten(ctx context.Context, in *URLRequest, opts ...grpc.CallOption) (*HashedURLReply, error)
 	GetUrl(ctx context.Context, in *HashedUrlRequest, opts ...grpc.CallOption) (*URLReply, error)
+	GetMyUrls(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*ArrayURLsReply, error)
 }
 
 type shortenerClient struct {
@@ -253,10 +430,20 @@ func (c *shortenerClient) GetUrl(ctx context.Context, in *HashedUrlRequest, opts
 	return out, nil
 }
 
+func (c *shortenerClient) GetMyUrls(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*ArrayURLsReply, error) {
+	out := new(ArrayURLsReply)
+	err := c.cc.Invoke(ctx, "/Shortener/GetMyUrls", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShortenerServer is the server API for Shortener service.
 type ShortenerServer interface {
 	Shorten(context.Context, *URLRequest) (*HashedURLReply, error)
 	GetUrl(context.Context, *HashedUrlRequest) (*URLReply, error)
+	GetMyUrls(context.Context, *UserIdRequest) (*ArrayURLsReply, error)
 }
 
 func RegisterShortenerServer(s *grpc.Server, srv ShortenerServer) {
@@ -299,6 +486,24 @@ func _Shortener_GetUrl_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Shortener_GetMyUrls_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServer).GetMyUrls(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Shortener/GetMyUrls",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServer).GetMyUrls(ctx, req.(*UserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Shortener_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Shortener",
 	HandlerType: (*ShortenerServer)(nil),
@@ -310,6 +515,10 @@ var _Shortener_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUrl",
 			Handler:    _Shortener_GetUrl_Handler,
+		},
+		{
+			MethodName: "GetMyUrls",
+			Handler:    _Shortener_GetMyUrls_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
