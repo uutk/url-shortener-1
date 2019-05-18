@@ -9,22 +9,125 @@ import (
 	"time"
 )
 
-type URL struct{
+type URL struct {
 	Id gocql.UUID
 	Url string
 	Hash string
 	Ts time.Time
 	Visited int32
-	UserId string
+	UserId gocql.UUID
+}
+
+type User struct {
+	Id gocql.UUID
+	ForeignId string
+	Tokens int32
+	CustomDomain string
 }
 
 var s *gocql.Session
 
+func CreateUser(userId string) (*gocql.UUID, error) {
+	log.Printf("No user with foreign id %s. Creating new one...", userId)
+
+	systemUserId := gocql.TimeUUID()
+	if err := s.Query(`INSERT INTO url_shortener.users (id, foreign_id, tokens) VALUES (?, ?, ?)`,
+		systemUserId, userId, 100).Exec(); err != nil {
+		return nil, err
+	}
+
+	log.Printf("User created with id %s.", systemUserId)
+	return &systemUserId, nil
+}
+
+func GetUserByForeignKey(userId string) (*User, error) {
+	var systemUserId gocql.UUID
+	var customDomain string
+	var tokens int32
+
+
+	log.Printf("Getting user by foreign id %s.", userId)
+	err := s.Query(`SELECT id, custom_domain, tokens FROM url_shortener.users WHERE foreign_id = ? LIMIT 1 ALLOW FILTERING`,
+		userId).Consistency(gocql.One).Scan(&systemUserId, &customDomain, &tokens)
+
+	if  err != nil {
+		return nil, err
+	}
+
+	log.Printf("Got user by foreign id %s. His foreign id is %s", userId, systemUserId)
+	return &User{Id: systemUserId, CustomDomain: customDomain, Tokens: tokens, ForeignId: userId}, nil
+}
+
+func AddCustomDomainToUser(userId string, customDomain string) (*User, error) {
+	log.Printf("Adding custom domain %s to the user by foreign id %s.", customDomain, userId)
+	err := s.Query(`UPDATE url_shortener.users SET custom_domain = ? WHERE foreign_id = ?`,
+		customDomain, userId).Exec()
+	if  err != nil {
+		return nil, err
+	}
+
+	user, err := GetUserByForeignKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("User successfully updated: id: %s, foreign_id: %s, custom domain: %s, tokens: %d", user.Id.String(), user.ForeignId, user.CustomDomain, user.Tokens)
+	return user, nil
+}
+
+func AddUserTokens(userId string, amount int32) (*User, error) {
+	log.Printf("Increating amount of user token by foreign id: %s", userId)
+	user, err := GetUserByForeignKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.Query(`UPDATE url_shortener.users SET tokens = ? WHERE id = ?`,
+		user.Tokens + amount, user.Id).Exec()
+	if  err != nil {
+		return nil, err
+	}
+
+	user, err = GetUserByForeignKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("User successfully updated: id: %s, foreign_id: %s, custom domain: %s, tokens: %d", user.Id.String(), user.ForeignId, user.CustomDomain, user.Tokens)
+	return user, nil
+}
+
+func DecUserTokens(userId string) (*User, error) {
+	log.Printf("Decreasing amount of user token by foreign id: %s", userId)
+	user, err := GetUserByForeignKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.Query(`UPDATE url_shortener.users SET tokens = ? WHERE id = ?`,
+		user.Tokens - 1, user.Id).Exec()
+	if  err != nil {
+		return nil, err
+	}
+
+	user, err = GetUserByForeignKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("User successfully updated: id: %s, foreign_id: %s, custom domain: %s, tokens: %d", user.Id.String(), user.ForeignId, user.CustomDomain, user.Tokens)
+	return user, nil
+}
+
 func ReadURLsByUserId(userId string) ([]URL, error) {
 	var urls []URL
+	user, err := GetUserByForeignKey(userId)
+	if err != nil {
+		return urls, err
+	}
 
 	iter := s.Query(`SELECT id, url, hash, ts, visited FROM url_shortener.urls WHERE user_id = ? ALLOW FILTERING`,
-		userId).Consistency(gocql.All).Iter()
+		user.Id).Consistency(gocql.All).Iter()
 
 	s, err := iter.SliceMap()
 
@@ -50,13 +153,24 @@ func WriteURL(url string, userId string) (string, error) {
 	id := gocql.TimeUUID()
 	hash := helpers.GetRandomString(6)
 
+	var systemUserId *gocql.UUID
+	user, err := GetUserByForeignKey(userId)
+	if  err != nil {
+		systemUserId, err = CreateUser(userId)
+
+		if err != nil {
+			return "", nil
+		}
+	} else {
+		systemUserId = &user.Id
+	}
+
 	// return url if it was already shortened for current user
 	var hashFromDB string
-	err := s.Query(`SELECT hash FROM url_shortener.urls WHERE url = ? AND user_id = ? LIMIT 1 ALLOW FILTERING`,
-		url, userId).Consistency(gocql.One).Scan(&hashFromDB)
+	err = s.Query(`SELECT hash FROM url_shortener.urls WHERE url = ? AND user_id = ? LIMIT 1 ALLOW FILTERING`,
+		url, systemUserId).Consistency(gocql.One).Scan(&hashFromDB)
 
 	if  err == nil {
-		log.Println(hashFromDB)
 		return hashFromDB, nil
 	}
 
@@ -68,12 +182,17 @@ func WriteURL(url string, userId string) (string, error) {
 			break
 		}
 	}
-
-	log.Println("lalka")
-
-	if err := s.Query(`INSERT INTO url_shortener."urls" (id, url, hash, ts, visited, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
-		id, url, hash, time.Now(), 0, userId).Exec(); err != nil {
+	if err := s.Query(`INSERT INTO url_shortener.urls (id, url, hash, ts, visited, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
+		id, url, hash, time.Now(), 0, systemUserId).Exec(); err != nil {
 		return "", err
+	}
+
+	if len(user.CustomDomain) != 0 {
+		user, err = DecUserTokens(userId)
+		if err != nil {
+			log.Warnf("Error decreasing user tokens amount: %s", err)
+			return hash, nil
+		}
 	}
 
 	return hash, nil
@@ -84,12 +203,12 @@ func ReadURL(hash string) (URL, error) {
 	var url string
 	var ts time.Time
 	var visited int32
-	var userId string
+	var userId gocql.UUID
 	var urlStruct URL
 
 	if err := s.Query(`SELECT id, url, ts, visited, user_id FROM url_shortener.urls WHERE hash = ? LIMIT 1 ALLOW FILTERING`,
 		hash).Consistency(gocql.One).Scan(&id, &url, &ts, &visited, &userId); err != nil {
-		log.Warn(err)
+		return urlStruct, err
 	} else {
 		if err := s.Query(`UPDATE url_shortener.urls SET visited = ? WHERE id = ?`,
 			visited + 1, id).Exec(); err != nil {

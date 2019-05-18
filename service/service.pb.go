@@ -343,6 +343,147 @@ func (m *URLReply) GetVisited() int32 {
 	return 0
 }
 
+type CustomDomainRequest struct {
+	UserId               string   `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	CustomDomain         string   `protobuf:"bytes,2,opt,name=custom_domain,json=customDomain,proto3" json:"custom_domain,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CustomDomainRequest) Reset()         { *m = CustomDomainRequest{} }
+func (m *CustomDomainRequest) String() string { return proto.CompactTextString(m) }
+func (*CustomDomainRequest) ProtoMessage()    {}
+func (*CustomDomainRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0b84a42fa06f626, []int{7}
+}
+
+func (m *CustomDomainRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CustomDomainRequest.Unmarshal(m, b)
+}
+func (m *CustomDomainRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CustomDomainRequest.Marshal(b, m, deterministic)
+}
+func (m *CustomDomainRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomDomainRequest.Merge(m, src)
+}
+func (m *CustomDomainRequest) XXX_Size() int {
+	return xxx_messageInfo_CustomDomainRequest.Size(m)
+}
+func (m *CustomDomainRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomDomainRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomDomainRequest proto.InternalMessageInfo
+
+func (m *CustomDomainRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
+func (m *CustomDomainRequest) GetCustomDomain() string {
+	if m != nil {
+		return m.CustomDomain
+	}
+	return ""
+}
+
+type UpdateTokensRequest struct {
+	UserId               string   `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Amount               string   `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateTokensRequest) Reset()         { *m = UpdateTokensRequest{} }
+func (m *UpdateTokensRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateTokensRequest) ProtoMessage()    {}
+func (*UpdateTokensRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0b84a42fa06f626, []int{8}
+}
+
+func (m *UpdateTokensRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateTokensRequest.Unmarshal(m, b)
+}
+func (m *UpdateTokensRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateTokensRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateTokensRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateTokensRequest.Merge(m, src)
+}
+func (m *UpdateTokensRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateTokensRequest.Size(m)
+}
+func (m *UpdateTokensRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateTokensRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateTokensRequest proto.InternalMessageInfo
+
+func (m *UpdateTokensRequest) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
+func (m *UpdateTokensRequest) GetAmount() string {
+	if m != nil {
+		return m.Amount
+	}
+	return ""
+}
+
+type UserObjectReply struct {
+	Tokens               int32    `protobuf:"varint,1,opt,name=tokens,proto3" json:"tokens,omitempty"`
+	CustomDomain         string   `protobuf:"bytes,2,opt,name=custom_domain,json=customDomain,proto3" json:"custom_domain,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UserObjectReply) Reset()         { *m = UserObjectReply{} }
+func (m *UserObjectReply) String() string { return proto.CompactTextString(m) }
+func (*UserObjectReply) ProtoMessage()    {}
+func (*UserObjectReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0b84a42fa06f626, []int{9}
+}
+
+func (m *UserObjectReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UserObjectReply.Unmarshal(m, b)
+}
+func (m *UserObjectReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UserObjectReply.Marshal(b, m, deterministic)
+}
+func (m *UserObjectReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserObjectReply.Merge(m, src)
+}
+func (m *UserObjectReply) XXX_Size() int {
+	return xxx_messageInfo_UserObjectReply.Size(m)
+}
+func (m *UserObjectReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserObjectReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UserObjectReply proto.InternalMessageInfo
+
+func (m *UserObjectReply) GetTokens() int32 {
+	if m != nil {
+		return m.Tokens
+	}
+	return 0
+}
+
+func (m *UserObjectReply) GetCustomDomain() string {
+	if m != nil {
+		return m.CustomDomain
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*FullURLObject)(nil), "FullURLObject")
 	proto.RegisterType((*URLRequest)(nil), "URLRequest")
@@ -351,32 +492,43 @@ func init() {
 	proto.RegisterType((*ArrayURLsReply)(nil), "ArrayURLsReply")
 	proto.RegisterType((*HashedUrlRequest)(nil), "HashedUrlRequest")
 	proto.RegisterType((*URLReply)(nil), "URLReply")
+	proto.RegisterType((*CustomDomainRequest)(nil), "CustomDomainRequest")
+	proto.RegisterType((*UpdateTokensRequest)(nil), "UpdateTokensRequest")
+	proto.RegisterType((*UserObjectReply)(nil), "UserObjectReply")
 }
 
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 307 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0x41, 0x4f, 0x02, 0x31,
-	0x10, 0x85, 0x29, 0x20, 0xb8, 0x43, 0x58, 0xb0, 0x17, 0x37, 0x9c, 0x48, 0x4f, 0xeb, 0xa5, 0x07,
-	0x34, 0x7a, 0x34, 0x5e, 0x44, 0x13, 0x8c, 0x49, 0x4d, 0xcf, 0x06, 0xd8, 0x49, 0x76, 0x4d, 0x23,
-	0x38, 0xed, 0x92, 0xec, 0xbf, 0xf0, 0x27, 0x1b, 0x2a, 0x1b, 0xb7, 0x2a, 0xb7, 0x99, 0x76, 0xde,
-	0x9b, 0xd7, 0x2f, 0x85, 0xa1, 0x45, 0xda, 0x15, 0x6b, 0x94, 0x5b, 0xda, 0xb8, 0x8d, 0xc8, 0x61,
-	0x78, 0x5f, 0x1a, 0xa3, 0xd5, 0xe2, 0x79, 0xf5, 0x86, 0x6b, 0xc7, 0xc7, 0xd0, 0x29, 0xc9, 0x24,
-	0x6c, 0xca, 0xd2, 0x48, 0xed, 0x4b, 0xce, 0xa1, 0x9b, 0x2f, 0x6d, 0x9e, 0xb4, 0xfd, 0x91, 0xaf,
-	0x79, 0x02, 0xfd, 0x5d, 0x61, 0x0b, 0x87, 0x59, 0xd2, 0x99, 0xb2, 0xf4, 0x44, 0xd5, 0x2d, 0x3f,
-	0x87, 0x7e, 0x69, 0x91, 0x5e, 0x8b, 0x2c, 0xe9, 0x7a, 0x41, 0x6f, 0xdf, 0x3e, 0x66, 0xe2, 0x06,
-	0x40, 0xab, 0x85, 0xc2, 0x8f, 0x12, 0xed, 0x7f, 0x6b, 0x1a, 0xc2, 0x76, 0x20, 0x14, 0x10, 0x3f,
-	0x2c, 0x6d, 0x8e, 0x99, 0x97, 0x6f, 0x4d, 0xf5, 0x57, 0x2c, 0x52, 0x18, 0x6a, 0x3f, 0x5d, 0xfb,
-	0x37, 0xdc, 0x58, 0xe0, 0x76, 0x05, 0xf1, 0x1d, 0xd1, 0xb2, 0xd2, 0x6a, 0x61, 0xbf, 0xdd, 0x04,
-	0x74, 0x4b, 0x32, 0x36, 0x61, 0xd3, 0x4e, 0x3a, 0x98, 0xc5, 0x32, 0xe0, 0xa1, 0xfc, 0x9d, 0xb8,
-	0x85, 0xf1, 0x21, 0x03, 0x99, 0x7a, 0x45, 0xcd, 0x85, 0x35, 0xb8, 0x1c, 0x7d, 0xc4, 0x35, 0x9c,
-	0x1e, 0x8f, 0xdf, 0xc4, 0xd9, 0x0e, 0x70, 0xce, 0x3e, 0x19, 0x44, 0x2f, 0xf9, 0x86, 0x1c, 0xbe,
-	0x23, 0xf1, 0x0b, 0xe8, 0x1f, 0x1a, 0x3e, 0x90, 0x3f, 0x34, 0x27, 0x23, 0x19, 0x12, 0x12, 0x2d,
-	0x9e, 0x42, 0x6f, 0x8e, 0x4e, 0x93, 0xe1, 0x67, 0xf2, 0x77, 0xf4, 0x49, 0x24, 0x1b, 0x93, 0x12,
-	0xa2, 0x39, 0xba, 0xa7, 0x4a, 0x93, 0xb1, 0x3c, 0x96, 0x01, 0xc7, 0xc9, 0x48, 0x86, 0xb4, 0x44,
-	0x6b, 0xd5, 0xf3, 0x3f, 0xe7, 0xf2, 0x2b, 0x00, 0x00, 0xff, 0xff, 0x4a, 0xf8, 0x86, 0x93, 0x4a,
-	0x02, 0x00, 0x00,
+	// 438 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0x41, 0x6f, 0xd3, 0x30,
+	0x14, 0x6e, 0xd2, 0x2e, 0x25, 0xaf, 0x24, 0x29, 0xde, 0x34, 0xa2, 0x9e, 0x2a, 0x73, 0x09, 0x17,
+	0x4b, 0x0c, 0x04, 0x07, 0x0e, 0x68, 0x02, 0x6d, 0x20, 0x15, 0x90, 0x5c, 0x72, 0x9e, 0xb2, 0xc4,
+	0x28, 0x01, 0x37, 0x2e, 0xb6, 0x33, 0xa9, 0x3f, 0x8e, 0xff, 0x86, 0xe2, 0x26, 0x22, 0xd9, 0x52,
+	0xca, 0xcd, 0x5f, 0xf2, 0xbe, 0xcf, 0xef, 0x7d, 0xdf, 0x33, 0x78, 0x8a, 0xc9, 0xbb, 0x22, 0x65,
+	0x64, 0x2b, 0x85, 0x16, 0x38, 0x07, 0xef, 0xaa, 0xe2, 0x3c, 0xa6, 0xab, 0xaf, 0xb7, 0x3f, 0x58,
+	0xaa, 0xd1, 0x1c, 0xc6, 0x95, 0xe4, 0xa1, 0xb5, 0xb4, 0x22, 0x97, 0xd6, 0x47, 0x84, 0x60, 0x92,
+	0x27, 0x2a, 0x0f, 0x6d, 0xf3, 0xc9, 0x9c, 0x51, 0x08, 0xd3, 0xbb, 0x42, 0x15, 0x9a, 0x65, 0xe1,
+	0x78, 0x69, 0x45, 0x27, 0xb4, 0x85, 0xe8, 0x29, 0x4c, 0x2b, 0xc5, 0xe4, 0x4d, 0x91, 0x85, 0x13,
+	0x43, 0x70, 0x6a, 0xf8, 0x29, 0xc3, 0x6f, 0x00, 0x62, 0xba, 0xa2, 0xec, 0x57, 0xc5, 0xd4, 0xd0,
+	0x35, 0x1d, 0xa2, 0xdd, 0x23, 0x62, 0xf0, 0x3f, 0x26, 0x2a, 0x67, 0x99, 0xa1, 0x6f, 0xf9, 0xee,
+	0x21, 0x19, 0x47, 0xe0, 0xc5, 0xa6, 0xba, 0xd5, 0xef, 0xa8, 0x59, 0x3d, 0xb5, 0x57, 0xe0, 0x5f,
+	0x4a, 0x99, 0xec, 0x62, 0xba, 0x52, 0x7b, 0x35, 0x0c, 0x93, 0x4a, 0x72, 0x15, 0x5a, 0xcb, 0x71,
+	0x34, 0xbb, 0xf0, 0x49, 0xcf, 0x0f, 0x6a, 0xfe, 0xe1, 0x77, 0x30, 0x6f, 0x7a, 0x90, 0xbc, 0xbd,
+	0xa2, 0xf5, 0xc5, 0xea, 0xf8, 0x72, 0x70, 0x88, 0xd7, 0xf0, 0xe8, 0x70, 0xfb, 0x5d, 0x3b, 0xed,
+	0x9e, 0x9d, 0x78, 0x0d, 0xa7, 0xef, 0x2b, 0xa5, 0xc5, 0xe6, 0x83, 0xd8, 0x24, 0x45, 0x79, 0x6c,
+	0x3c, 0xf4, 0x0c, 0xbc, 0xd4, 0xd4, 0xdf, 0x64, 0x86, 0xd0, 0xb4, 0xf1, 0x38, 0xed, 0x88, 0xe0,
+	0x2b, 0x38, 0x8d, 0xb7, 0x59, 0xa2, 0xd9, 0x37, 0xf1, 0x93, 0x95, 0xea, 0xa8, 0xe8, 0x39, 0x38,
+	0xc9, 0x46, 0x54, 0xa5, 0x6e, 0x87, 0xda, 0x23, 0xfc, 0x05, 0x82, 0xda, 0xf5, 0xc6, 0x29, 0x33,
+	0xdb, 0x39, 0x38, 0xda, 0x88, 0x1a, 0x89, 0x13, 0xda, 0xa0, 0xff, 0xea, 0xeb, 0xe2, 0xb7, 0x0d,
+	0xee, 0x3a, 0x17, 0x52, 0xb3, 0x92, 0x49, 0xf4, 0x1c, 0xa6, 0x0d, 0x40, 0x33, 0xf2, 0x77, 0x75,
+	0x16, 0x01, 0xe9, 0xaf, 0x03, 0x1e, 0xa1, 0x08, 0x9c, 0x6b, 0xa6, 0x63, 0xc9, 0xd1, 0x13, 0x72,
+	0x3f, 0xa7, 0x85, 0x4b, 0x3a, 0x95, 0x04, 0xdc, 0x6b, 0xa6, 0x3f, 0xef, 0x62, 0xc9, 0x15, 0xf2,
+	0x49, 0x6f, 0x69, 0x16, 0x01, 0xe9, 0xaf, 0x06, 0x1e, 0xa1, 0x17, 0x30, 0xab, 0x95, 0xeb, 0xb2,
+	0xf2, 0xbb, 0x78, 0xc0, 0x98, 0x93, 0x7b, 0x06, 0xe0, 0x11, 0x7a, 0x0b, 0xc1, 0x9a, 0xe9, 0x6e,
+	0x6a, 0xe8, 0x8c, 0x0c, 0x84, 0xf8, 0x0f, 0xf2, 0x3e, 0x97, 0x4b, 0xe3, 0x32, 0x3a, 0x23, 0x03,
+	0x61, 0x0d, 0x91, 0x6f, 0x1d, 0xf3, 0xa6, 0x5f, 0xfe, 0x09, 0x00, 0x00, 0xff, 0xff, 0xde, 0xcc,
+	0x6d, 0xac, 0xe4, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -394,6 +546,9 @@ type ShortenerClient interface {
 	Shorten(ctx context.Context, in *URLRequest, opts ...grpc.CallOption) (*HashedURLReply, error)
 	GetUrl(ctx context.Context, in *HashedUrlRequest, opts ...grpc.CallOption) (*URLReply, error)
 	GetMyUrls(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*ArrayURLsReply, error)
+	GetUserInfo(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*UserObjectReply, error)
+	SetCustomDomain(ctx context.Context, in *CustomDomainRequest, opts ...grpc.CallOption) (*UserObjectReply, error)
+	SetTokensAmount(ctx context.Context, in *UpdateTokensRequest, opts ...grpc.CallOption) (*UserObjectReply, error)
 }
 
 type shortenerClient struct {
@@ -431,11 +586,41 @@ func (c *shortenerClient) GetMyUrls(ctx context.Context, in *UserIdRequest, opts
 	return out, nil
 }
 
+func (c *shortenerClient) GetUserInfo(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*UserObjectReply, error) {
+	out := new(UserObjectReply)
+	err := c.cc.Invoke(ctx, "/Shortener/GetUserInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shortenerClient) SetCustomDomain(ctx context.Context, in *CustomDomainRequest, opts ...grpc.CallOption) (*UserObjectReply, error) {
+	out := new(UserObjectReply)
+	err := c.cc.Invoke(ctx, "/Shortener/SetCustomDomain", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shortenerClient) SetTokensAmount(ctx context.Context, in *UpdateTokensRequest, opts ...grpc.CallOption) (*UserObjectReply, error) {
+	out := new(UserObjectReply)
+	err := c.cc.Invoke(ctx, "/Shortener/SetTokensAmount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShortenerServer is the server API for Shortener service.
 type ShortenerServer interface {
 	Shorten(context.Context, *URLRequest) (*HashedURLReply, error)
 	GetUrl(context.Context, *HashedUrlRequest) (*URLReply, error)
 	GetMyUrls(context.Context, *UserIdRequest) (*ArrayURLsReply, error)
+	GetUserInfo(context.Context, *UserIdRequest) (*UserObjectReply, error)
+	SetCustomDomain(context.Context, *CustomDomainRequest) (*UserObjectReply, error)
+	SetTokensAmount(context.Context, *UpdateTokensRequest) (*UserObjectReply, error)
 }
 
 func RegisterShortenerServer(s *grpc.Server, srv ShortenerServer) {
@@ -496,6 +681,60 @@ func _Shortener_GetMyUrls_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Shortener_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServer).GetUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Shortener/GetUserInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServer).GetUserInfo(ctx, req.(*UserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Shortener_SetCustomDomain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomDomainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServer).SetCustomDomain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Shortener/SetCustomDomain",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServer).SetCustomDomain(ctx, req.(*CustomDomainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Shortener_SetTokensAmount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTokensRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShortenerServer).SetTokensAmount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Shortener/SetTokensAmount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShortenerServer).SetTokensAmount(ctx, req.(*UpdateTokensRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Shortener_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Shortener",
 	HandlerType: (*ShortenerServer)(nil),
@@ -511,6 +750,18 @@ var _Shortener_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMyUrls",
 			Handler:    _Shortener_GetMyUrls_Handler,
+		},
+		{
+			MethodName: "GetUserInfo",
+			Handler:    _Shortener_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "SetCustomDomain",
+			Handler:    _Shortener_SetCustomDomain_Handler,
+		},
+		{
+			MethodName: "SetTokensAmount",
+			Handler:    _Shortener_SetTokensAmount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

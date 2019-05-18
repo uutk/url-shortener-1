@@ -14,8 +14,41 @@ import (
 
 type server struct{}
 
+func (s *server) GetUserInfo(ctx context.Context, in *pb.UserIdRequest) (*pb.UserObjectReply, error) {
+	log.Printf("Received for GetUserInfo: %s", in.UserId)
+
+	user, err := db.GetUserByForeignKey(in.UserId)
+	if err != nil {
+		log.Warnf("Can't read user by foreign key %s: $s", in.UserId, err)
+	}
+
+	return &pb.UserObjectReply{Tokens: user.Tokens, CustomDomain: user.CustomDomain}, nil
+}
+
+func (s *server) SetCustomDomain(ctx context.Context, in *pb.CustomDomainRequest) (*pb.UserObjectReply, error) {
+	log.Printf("Received for SetCustomDomain: foreign id: %s, custom domain: %s", in.UserId, in.CustomDomain)
+
+	user, err := db.AddCustomDomainToUser(in.UserId, in.CustomDomain)
+	if err != nil {
+		log.Warnf("Can't set custom domain to user by foreign key %s: $s", in.UserId, err)
+	}
+
+	return &pb.UserObjectReply{Tokens: user.Tokens, CustomDomain: user.CustomDomain}, nil
+}
+
+func (s *server) SetTokensAmount(ctx context.Context, in *pb.UpdateTokensRequest) (*pb.UserObjectReply, error) {
+	log.Printf("Received for SetTokensAmount: foreign id: %s, amount: %d", in.UserId, in.Amount)
+
+	user, err := db.AddCustomDomainToUser(in.UserId, in.Amount)
+	if err != nil {
+		log.Warnf("Can't set tokens amount to user by foreign key %s: $s", in.UserId, err)
+	}
+
+	return &pb.UserObjectReply{Tokens: user.Tokens, CustomDomain: user.CustomDomain}, nil
+}
+
 func (s *server) GetMyUrls(ctx context.Context, in *pb.UserIdRequest) (*pb.ArrayURLsReply, error) {
-	log.Printf("Received user_id: %v", in.UserId)
+	log.Printf("Received user_id for GetMyUrls: %s", in.UserId)
 	var urlsReplyArray []*pb.FullURLObject
 
 	urls, err := db.ReadURLsByUserId(in.UserId)
@@ -25,7 +58,7 @@ func (s *server) GetMyUrls(ctx context.Context, in *pb.UserIdRequest) (*pb.Array
 	}
 
 	for _, item := range urls {
-		urlsReplyArray = append(urlsReplyArray, &pb.FullURLObject{Url: item.Url, Hash: item.Hash, Visited: item.Visited, UserId: item.UserId})
+		urlsReplyArray = append(urlsReplyArray, &pb.FullURLObject{Url: item.Url, Hash: item.Hash, Visited: item.Visited, UserId: item.UserId.String()})
 	}
 
 	log.Printf("URL list goes to user id %s", in.UserId)
@@ -33,7 +66,7 @@ func (s *server) GetMyUrls(ctx context.Context, in *pb.UserIdRequest) (*pb.Array
 }
 
 func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLReply, error) {
-	log.Printf("Received: %v", in.Url)
+	log.Printf("Received for Shorten: %s", in.Url)
 
 	if !helpers.IsUrl(in.Url) {
 		return nil, errors.New("provided url is not a string")
@@ -56,7 +89,7 @@ func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLR
 }
 
 func (s *server) GetUrl(ctx context.Context, in *pb.HashedUrlRequest) (*pb.URLReply, error) {
-	log.Printf("Received: %v", in.Hash)
+	log.Printf("Received for GetUrl: %v", in.Hash)
 
 	url, err := db.ReadURL(in.Hash)
 	if err != nil {
