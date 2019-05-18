@@ -2,11 +2,11 @@ package db
 
 import (
 	"github.com/gocql/gocql"
+	"github.com/mitchellh/mapstructure"
 	log "github.com/sirupsen/logrus"
 	"github.com/vladkampov/url-shortener/helpers"
 	"os"
 	"time"
-	"github.com/mitchellh/mapstructure"
 )
 
 type URL struct{
@@ -112,15 +112,16 @@ func RunCassandra() (*gocql.Session, error) {
 	if dbAddress != "localhost" {
 		cluster.Authenticator = gocql.PasswordAuthenticator{Username: os.Getenv("SHORTENER_DB_USER"), Password: os.Getenv("SHORTENER_DB_PASSWORD")}
 	}
-
 	cluster.Keyspace = "url_shortener"
 	cluster.Consistency = gocql.Quorum
+	cluster.ProtoVersion = 4
+	cluster.CQLVersion = "3.4.4"
 
 	session, err := cluster.CreateSession()
-	s = session
 	if err != nil {
 		return nil, err
 	}
+	s = session
 
 	log.Println("Cassandra connected!")
 	return s, nil

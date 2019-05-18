@@ -48,6 +48,7 @@ func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLR
 	hash, err := db.WriteURL(in.Url, in.UserId)
 	if err != nil {
 		log.Warnf("Can't write url %s: %s", in.Url, err)
+		return nil, err
 	}
 
 	log.Printf("Hashed. New URL is: %v", webUrl + hash)
