@@ -60,13 +60,18 @@ func GetUserByForeignKey(userId string) (*User, error) {
 
 func AddCustomDomainToUser(userId string, customDomain string) (*User, error) {
 	log.Printf("Adding custom domain %s to the user by foreign id %s.", customDomain, userId)
-	err := s.Query(`UPDATE url_shortener.users SET custom_domain = ? WHERE foreign_id = ?`,
-		customDomain, userId).Exec()
+	user, err := GetUserByForeignKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.Query(`UPDATE url_shortener.users SET custom_domain = ? WHERE id = ?`,
+		customDomain, user.Id).Exec()
 	if  err != nil {
 		return nil, err
 	}
 
-	user, err := GetUserByForeignKey(userId)
+	user, err = GetUserByForeignKey(userId)
 	if err != nil {
 		return nil, err
 	}

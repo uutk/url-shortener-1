@@ -73,9 +73,17 @@ func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLR
 	}
 
 	webUrl := os.Getenv("SHORTENER_DOMAIN_WEB_URL")
-
 	if len(webUrl) == 0 {
-		webUrl = "http://kmpv.me/"
+		webUrl = "https://kmpv.me/"
+	}
+
+	user, err := db.GetUserByForeignKey(in.UserId)
+	if err != nil {
+		log.Warnf("Can't read user by foreign key %s: $s", in.UserId, err)
+	}
+
+	if len(user.CustomDomain) != 0 {
+		webUrl = user.CustomDomain + "/"
 	}
 
 	hash, err := db.WriteURL(in.Url, in.UserId)
