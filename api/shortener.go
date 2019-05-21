@@ -19,7 +19,8 @@ func (s *server) GetUserInfo(ctx context.Context, in *pb.UserIdRequest) (*pb.Use
 
 	user, err := db.GetUserByForeignKey(in.UserId)
 	if err != nil {
-		log.Warnf("Can't read user by foreign key %s: $s", in.UserId, err)
+		log.Warnf("Can't read user by foreign key %s: %s", in.UserId, err)
+		return nil, err
 	}
 
 	return &pb.UserObjectReply{Tokens: user.Tokens, CustomDomain: user.CustomDomain}, nil
@@ -30,7 +31,8 @@ func (s *server) SetCustomDomain(ctx context.Context, in *pb.CustomDomainRequest
 
 	user, err := db.AddCustomDomainToUser(in.UserId, in.CustomDomain)
 	if err != nil {
-		log.Warnf("Can't set custom domain to user by foreign key %s: $s", in.UserId, err)
+		log.Warnf("Can't set custom domain to user by foreign key %s: %s", in.UserId, err)
+		return nil, err
 	}
 
 	return &pb.UserObjectReply{Tokens: user.Tokens, CustomDomain: user.CustomDomain}, nil
@@ -41,7 +43,8 @@ func (s *server) SetTokensAmount(ctx context.Context, in *pb.UpdateTokensRequest
 
 	user, err := db.AddCustomDomainToUser(in.UserId, in.Amount)
 	if err != nil {
-		log.Warnf("Can't set tokens amount to user by foreign key %s: $s", in.UserId, err)
+		log.Warnf("Can't set tokens amount to user by foreign key %s: %s", in.UserId, err)
+		return nil, err
 	}
 
 	return &pb.UserObjectReply{Tokens: user.Tokens, CustomDomain: user.CustomDomain}, nil
@@ -79,7 +82,7 @@ func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLR
 
 	user, err := db.GetUserByForeignKey(in.UserId)
 	if err != nil {
-		log.Warnf("Can't read user by foreign key %s: $s", in.UserId, err)
+		log.Warnf("Can't read user by foreign key %s: %s", in.UserId, err)
 	}
 
 	if len(user.CustomDomain) != 0 {

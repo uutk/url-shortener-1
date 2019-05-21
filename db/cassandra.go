@@ -41,7 +41,7 @@ func CreateUser(userId string) (*gocql.UUID, error) {
 }
 
 func GetUserByForeignKey(userId string) (*User, error) {
-	var systemUserId gocql.UUID
+	var systemUserId *gocql.UUID
 	var customDomain string
 	var tokens int32
 
@@ -49,13 +49,15 @@ func GetUserByForeignKey(userId string) (*User, error) {
 	log.Printf("Getting user by foreign id %s.", userId)
 	err := s.Query(`SELECT id, custom_domain, tokens FROM url_shortener.users WHERE foreign_id = ? LIMIT 1 ALLOW FILTERING`,
 		userId).Consistency(gocql.One).Scan(&systemUserId, &customDomain, &tokens)
-
 	if  err != nil {
-		return nil, err
+		systemUserId, err = CreateUser(userId)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	log.Printf("Got user by foreign id %s. His foreign id is %s", userId, systemUserId)
-	return &User{Id: systemUserId, CustomDomain: customDomain, Tokens: tokens, ForeignId: userId}, nil
+	return &User{Id: *systemUserId, CustomDomain: customDomain, Tokens: tokens, ForeignId: userId}, nil
 }
 
 func AddCustomDomainToUser(userId string, customDomain string) (*User, error) {
@@ -158,22 +160,12 @@ func WriteURL(url string, userId string) (string, error) {
 	id := gocql.TimeUUID()
 	hash := helpers.GetRandomString(6)
 
-	var systemUserId *gocql.UUID
 	user, err := GetUserByForeignKey(userId)
-	if  err != nil {
-		systemUserId, err = CreateUser(userId)
-
-		if err != nil {
-			return "", nil
-		}
-	} else {
-		systemUserId = &user.Id
-	}
 
 	// return url if it was already shortened for current user
 	var hashFromDB string
 	err = s.Query(`SELECT hash FROM url_shortener.urls WHERE url = ? AND user_id = ? LIMIT 1 ALLOW FILTERING`,
-		url, systemUserId).Consistency(gocql.One).Scan(&hashFromDB)
+		url, user.Id).Consistency(gocql.One).Scan(&hashFromDB)
 
 	if  err == nil {
 		return hashFromDB, nil
@@ -188,7 +180,7 @@ func WriteURL(url string, userId string) (string, error) {
 		}
 	}
 	if err := s.Query(`INSERT INTO url_shortener.urls (id, url, hash, ts, visited, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
-		id, url, hash, time.Now(), 0, systemUserId).Exec(); err != nil {
+		id, url, hash, time.Now(), 0, user.Id).Exec(); err != nil {
 		return "", err
 	}
 
