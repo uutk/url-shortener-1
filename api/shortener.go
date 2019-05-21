@@ -101,7 +101,8 @@ func (s *server) GetUrl(ctx context.Context, in *pb.HashedUrlRequest) (*pb.URLRe
 
 	url, err := db.ReadURL(in.Hash)
 	if err != nil {
-		log.Warnf("Can't read url by hash %s: $s", in.Hash, err)
+		log.Warnf("Can't read url by hash %s: %s", in.Hash, err)
+		return nil, err
 	}
 
 	return &pb.URLReply{Url: url.Url, Visited: url.Visited}, nil
