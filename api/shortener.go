@@ -9,6 +9,7 @@ import (
 	pb "github.com/vladkampov/url-shortener/service"
 	"google.golang.org/grpc"
 	"net"
+	"net/http"
 	"os"
 )
 
@@ -68,11 +69,35 @@ func (s *server) GetMyUrls(ctx context.Context, in *pb.UserIdRequest) (*pb.Array
 	return &pb.ArrayURLsReply{Urls: urlsReplyArray}, nil
 }
 
+func isURLOverRequest(url string, protocol string) bool {
+	log.Printf("Checking url %s via request with %s", url)
+
+	resp, err := http.Get(protocol + url)
+	if err != nil {
+		log.Warnf("Error checking url %s via request with %s: %s", url, protocol, err)
+		if protocol == "https://" {
+			return isURLOverRequest(url, "http://")
+		}
+
+		return false
+	}
+
+	err = resp.Body.Close()
+	if err != nil {
+		log.Warnf("Error handling resp.Body close for url %s with %s: %s", url, protocol, err)
+		return false
+	}
+
+	return true
+}
+
 func (s *server) Shorten(ctx context.Context, in *pb.URLRequest) (*pb.HashedURLReply, error) {
 	log.Printf("Received for Shorten: %s", in.Url)
 
 	if !helpers.IsUrl(in.Url) {
-		return nil, errors.New("provided url is not a string")
+		if !isURLOverRequest(in.Url, "https://") {
+			return nil, errors.New("provided string is not a url")
+		}
 	}
 
 	webUrl := os.Getenv("SHORTENER_DOMAIN_WEB_URL")
